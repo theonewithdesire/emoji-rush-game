@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Emoji Memory Rush</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-bg"></div>
+
+  <main class="app">
+    <!-- Start Screen -->
+    <section id="start-screen" class="panel center-panel">
+      <h1 class="title">Emoji Memory Rush</h1>
+      <p class="subtitle">Watch the sequence, then repeat it by tapping the emojis in order.</p>
+      <div class="controls">
+        <button id="start-btn" class="btn primary">Start Game</button>
+        <div class="highscore">High Score: <span id="highscore-start">0</span></div>
+      </div>
+      <small class="hint">Shorter display time each round — how far can you go?</small>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="game-screen" class="panel game-panel hidden">
+      <div class="top-row">
+        <div class="round">Round: <span id="round-number">1</span></div>
+        <div class="hints">Hints: <span id="hint-count">3</span> <button id="hint-btn" class="btn ghost">Use Hint</button></div>
+        <div class="highscore">High: <span id="highscore-game">0</span></div>
+      </div>
+
+      <div id="sequence-display" class="sequence-display" aria-hidden="true"></div>
+
+      <div id="grid" class="emoji-grid" aria-label="Emoji Grid"></div>
+
+      <div class="bottom-row">
+        <button id="quit-btn" class="btn ghost">Quit</button>
+        <div class="info">Tap the emojis in the exact order shown</div>
+      </div>
+    </section>
+
+    <!-- Game Over Screen -->
+    <section id="gameover-screen" class="panel center-panel hidden">
+      <h2>Game Over</h2>
+      <p>Your score: <span id="final-score">0</span></p>
+      <p>Best: <span id="final-highscore">0</span></p>
+      <div class="controls">
+        <button id="replay-btn" class="btn primary">Play Again</button>
+        <button id="home-btn" class="btn ghost">Home</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html> 
