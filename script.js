@@ -1,8 +1,8 @@
 // script.js - Emoji Memory Rush (updated with hints)
 const emojiPool = [
-  "😀","😁","😂","🤣","😅","😊","😍","🤩","😎","🤓",
-  "🫠","🤖","👻","💩","🎃","🐶","🐱","🦊","🐼","🦄",
-  "🍏","🍕","🍩","⚽","🌈","🔥","⭐","🌙","🚀","🎵"
+  "😀", "😁", "😂", "🤣", "😅", "😊", "😍", "🤩", "😎", "🤓",
+  "🫠", "🤖", "👻", "💩", "🎃", "🐶", "🐱", "🦊", "🐼", "🦄",
+  "🍏", "🍕", "🍩", "⚽", "🌈", "🔥", "⭐", "🌙", "🚀", "🎵"
 ];
 
 // Config (increased starting display time)
@@ -41,26 +41,26 @@ const homeBtn = document.getElementById('home-btn');
 
 // Highscore
 const HS_KEY = 'emr_highscore';
-function getHighScore(){
+function getHighScore() {
   return parseInt(localStorage.getItem(HS_KEY) || '0', 10);
 }
-function setHighScore(v){
+function setHighScore(v) {
   localStorage.setItem(HS_KEY, String(v));
 }
 
 // Init
-function init(){
+function init() {
   highscoreStart.textContent = getHighScore();
   highscoreGame.textContent = getHighScore();
   buildGrid();
   updateHintUI();
 }
 
-function buildGrid(){
+function buildGrid() {
   grid.innerHTML = '';
   // shuffle pool visually so players can't guess positions
-  const shuffled = [...emojiPool].sort(()=>Math.random()-0.5);
-  shuffled.forEach((emo, idx)=>{
+  const shuffled = [...emojiPool].sort(() => Math.random() - 0.5);
+  shuffled.forEach((emo, idx) => {
     const btn = document.createElement('button');
     btn.className = 'emoji-btn';
     btn.type = 'button';
@@ -73,23 +73,23 @@ function buildGrid(){
 }
 
 // Game flow
-startBtn.addEventListener('click', ()=>{
+startBtn.addEventListener('click', () => {
   startGame();
 });
-quitBtn.addEventListener('click', ()=>{
+quitBtn.addEventListener('click', () => {
   endGame(true);
 });
-replayBtn.addEventListener('click', ()=>{
+replayBtn.addEventListener('click', () => {
   startGame();
 });
-homeBtn.addEventListener('click', ()=>{
+homeBtn.addEventListener('click', () => {
   showScreen('start');
 });
-hintBtn && hintBtn.addEventListener('click', ()=>{
+hintBtn && hintBtn.addEventListener('click', () => {
   useHint();
 });
 
-function startGame(){
+function startGame() {
   sequence = [];
   playerIndex = 0;
   roundNumber = 0;
@@ -101,32 +101,32 @@ function startGame(){
   highscoreGame.textContent = getHighScore();
   updateHintUI();
   showScreen('game');
-  setTimeout(()=> nextRound(), 300);
+  setTimeout(() => nextRound(), 300);
 }
 
-function nextRound(){
+function nextRound() {
   roundNumber++;
   roundNumberEl.textContent = String(roundNumber);
   // generate a brand-new random sequence for this round (length == roundNumber)
-  sequence = Array.from({length: roundNumber}, ()=> emojiPool[Math.floor(Math.random()*emojiPool.length)]);
+  sequence = Array.from({ length: roundNumber }, () => emojiPool[Math.floor(Math.random() * emojiPool.length)]);
   acceptingInput = false;
   // show all emojis simultaneously for displayMs
-  showSequence(sequence, displayMs).then(()=>{
+  showSequence(sequence, displayMs).then(() => {
     // reshuffle grid so positions change each round
     buildGrid();
     acceptingInput = true;
     playerIndex = 0;
-    document.querySelectorAll('.emoji-btn').forEach(b=>b.classList.remove('disabled','correct','wrong'));
+    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('disabled', 'correct', 'wrong'));
   });
   // decrease display time for next round
   displayMs = Math.max(MIN_DISPLAY_MS, displayMs - DISPLAY_DECREASE_MS);
 }
 
-function showSequence(seq, msPer){
-  return new Promise(resolve=>{
+function showSequence(seq, msPer) {
+  return new Promise(resolve => {
     sequenceDisplay.innerHTML = '';
     // create spans for all emojis
-    seq.forEach(emo=>{
+    seq.forEach(emo => {
       const span = document.createElement('div');
       span.className = 'sequence-emoji';
       span.textContent = emo;
@@ -135,26 +135,26 @@ function showSequence(seq, msPer){
       sequenceDisplay.appendChild(span);
     });
     // resolve after msPer (plus small buffer)
-    setTimeout(()=>{
+    setTimeout(() => {
       sequenceDisplay.innerHTML = '';
       resolve();
     }, msPer + 80);
   });
 }
 
-function onEmojiClick(e){
-  if(!acceptingInput) return;
+function onEmojiClick(e) {
+  if (!acceptingInput) return;
   const btn = e.currentTarget;
   const emo = btn.dataset.emoji;
   const expected = sequence[playerIndex];
-  if(emo === expected){
+  if (emo === expected) {
     // correct
     btn.classList.add('correct');
     playerIndex++;
-    if(playerIndex >= sequence.length){
+    if (playerIndex >= sequence.length) {
       // round cleared
       acceptingInput = false;
-      setTimeout(()=> nextRound(), 700);
+      setTimeout(() => nextRound(), 700);
       // update highscore display if needed
       updateHighScore(sequence.length);
     }
@@ -162,24 +162,24 @@ function onEmojiClick(e){
     // wrong -> game over
     btn.classList.add('wrong');
     acceptingInput = false;
-    setTimeout(()=> endGame(false), 450);
+    setTimeout(() => endGame(false), 450);
   }
 }
 
-function updateHighScore(score){
+function updateHighScore(score) {
   const prev = getHighScore();
-  if(score > prev){
+  if (score > prev) {
     setHighScore(score);
     highscoreStart.textContent = String(score);
     highscoreGame.textContent = String(score);
   }
 }
 
-function useHint(){
-  if(hintsRemaining <= 0) return;
-  if(sequence.length === 0) return;
+function useHint() {
+  if (hintsRemaining <= 0) return;
+  if (sequence.length === 0) return;
   // prevent spamming while sequence is being shown
-  if(!gameScreen || gameScreen.classList.contains('hidden')) return;
+  if (!gameScreen || gameScreen.classList.contains('hidden')) return;
 
   hintsRemaining--;
   updateHintUI();
@@ -189,14 +189,14 @@ function useHint(){
   const prevAccepting = acceptingInput;
   acceptingInput = false;
 
-  showSequence(sequence, hintDuration).then(()=>{
+  showSequence(sequence, hintDuration).then(() => {
     // briefly highlight the next expected emoji in the grid (if any)
     const next = sequence[playerIndex];
-    if(next){
-      const btn = Array.from(document.querySelectorAll('.emoji-btn')).find(b=>b.dataset.emoji === next);
-      if(btn){
+    if (next) {
+      const btn = Array.from(document.querySelectorAll('.emoji-btn')).find(b => b.dataset.emoji === next);
+      if (btn) {
         btn.classList.add('correct');
-        setTimeout(()=> btn.classList.remove('correct'), 900);
+        setTimeout(() => btn.classList.remove('correct'), 900);
       }
     }
     // restore input state
@@ -204,10 +204,10 @@ function useHint(){
   });
 }
 
-function updateHintUI(){
-  if(hintCountEl) hintCountEl.textContent = String(hintsRemaining);
-  if(hintBtn){
-    if(hintsRemaining <= 0 || gameScreen.classList.contains('hidden')){
+function updateHintUI() {
+  if (hintCountEl) hintCountEl.textContent = String(hintsRemaining);
+  if (hintBtn) {
+    if (hintsRemaining <= 0 || gameScreen.classList.contains('hidden')) {
       hintBtn.classList.add('disabled');
       hintBtn.disabled = true;
     } else {
@@ -217,24 +217,25 @@ function updateHintUI(){
   }
 }
 
-function endGame(quit=false){
+function endGame(quit = false) {
   // If player quits, completed rounds = roundNumber - 1
   // If player made a mistake, completed rounds = sequence.length - 1
   const finalScore = quit ? Math.max(0, roundNumber - 1) : Math.max(0, sequence.length - 1);
   finalScoreEl.textContent = String(finalScore);
 
   const prev = getHighScore();
-  if(finalScore > prev){
+  if (finalScore > prev) {
     setHighScore(finalScore);
   }
   finalHighEl.textContent = String(getHighScore());
   showScreen('gameover');
 }
 
-function showScreen(name){
+function showScreen(name) {
   startScreen.classList.toggle('hidden', name !== 'start');
   gameScreen.classList.toggle('hidden', name !== 'game');
   gameoverScreen.classList.toggle('hidden', name !== 'gameover');
+
   // refresh highs
   highscoreStart.textContent = getHighScore();
   highscoreGame.textContent = getHighScore();
@@ -242,4 +243,6 @@ function showScreen(name){
 }
 
 // initialize app
-init(); 
+init();
+// Set initial screen state
+showScreen('start'); 
