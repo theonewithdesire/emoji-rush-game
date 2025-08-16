@@ -2,12 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Emoji Memory Rush</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <title>Emoji Memory Rush - Free Online Memory Game | CrazyGames</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Test your memory with Emoji Memory Rush! Watch sequences, repeat patterns, and beat your high score in this addictive free online memory game." />
+  <meta name="keywords" content="memory game, emoji game, brain training, puzzle game, free online game, memory test, sequence game" />
+  <meta name="author" content="Emoji Memory Rush" />
+  <meta name="robots" content="index, follow" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="game" />
+  <meta property="og:title" content="Emoji Memory Rush - Free Memory Game" />
+  <meta property="og:description" content="Challenge your memory with emoji sequences! Free online brain training game." />
+  <meta property="og:site_name" content="CrazyGames" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Emoji Memory Rush - Free Memory Game" />
+  <meta name="twitter:description" content="Challenge your memory with emoji sequences! Free online brain training game." />
+  
+  <!-- Game-specific meta -->
+  <meta name="game-type" content="puzzle" />
+  <meta name="game-category" content="memory" />
+  <meta name="mobile-friendly" content="true" />
+  
+  <!-- Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 </head>
 <body>
   <div class="app-bg"></div>
@@ -15,43 +42,188 @@
   <main class="app">
     <!-- Start Screen -->
     <section id="start-screen" class="panel center-panel">
+      <div class="game-logo">🧠</div>
       <h1 class="title">Emoji Memory Rush</h1>
-      <p class="subtitle">A minimal, neon‑free memory rush. See the pattern, remember the order, beat your best.</p>
-      <div class="controls">
-        <button id="start-btn" class="btn primary">Start Game</button>
-        <div class="highscore">High Score: <span id="highscore-start">0</span></div>
+      <p class="subtitle">Challenge your memory with emoji sequences! Watch the pattern, repeat it perfectly, and beat your high score.</p>
+      <div class="game-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="highscore-start">0</div>
+          <div class="stat-label">Best Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="games-played">0</div>
+          <div class="stat-label">Games Played</div>
+        </div>
       </div>
-      <small class="hint">Shortening glimpse. Growing challenge. Limited hints — big bragging rights.</small>
+      <div class="controls">
+        <button id="start-btn" class="btn primary" aria-label="Start new game">
+          <span class="btn-icon">🎮</span>
+          <span>Start Game</span>
+        </button>
+        <button id="instructions-btn" class="btn ghost" aria-label="How to play">
+          <span class="btn-icon">❓</span>
+          <span>How to Play</span>
+        </button>
+      </div>
+      <div class="features">
+        <div class="feature">🎯 Progressive Difficulty</div>
+        <div class="feature">💡 Smart Hints</div>
+        <div class="feature">📱 Mobile Optimized</div>
+      </div>
+    </section>
+
+    <!-- Instructions Screen -->
+    <section id="instructions-screen" class="panel center-panel hidden">
+      <h2>How to Play</h2>
+      <div class="instructions-content">
+        <div class="instruction-step">
+          <div class="step-number">1</div>
+          <div class="step-text">Watch the emoji sequence carefully</div>
+        </div>
+        <div class="instruction-step">
+          <div class="step-number">2</div>
+          <div class="step-text">Repeat the sequence by tapping emojis</div>
+        </div>
+        <div class="instruction-step">
+          <div class="step-number">3</div>
+          <div class="step-text">Each round adds one more emoji</div>
+        </div>
+        <div class="instruction-step">
+          <div class="step-number">4</div>
+          <div class="step-text">Use hints wisely - you only get 3!</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="back-to-start-btn" class="btn primary">Got It!</button>
+      </div>
     </section>
 
     <!-- Game Screen -->
     <section id="game-screen" class="panel game-panel hidden">
-      <div class="top-row">
-        <div class="round">Round: <span id="round-number">1</span></div>
-        <div class="hints">Hints: <span id="hint-count">3</span> <button id="hint-btn" class="btn ghost">Use Hint</button></div>
-        <div class="highscore">High: <span id="highscore-game">0</span></div>
+      <div class="game-header">
+        <div class="game-info">
+          <div class="round-display">
+            <span class="round-label">Round</span>
+            <span id="round-number" class="round-number">1</span>
+          </div>
+          <div class="score-display">
+            <span class="score-label">Best</span>
+            <span id="highscore-game" class="score-number">0</span>
+          </div>
+        </div>
+        <div class="game-controls">
+          <button id="pause-btn" class="btn icon-btn" aria-label="Pause game" title="Pause (Space)">
+            <span class="btn-icon">⏸️</span>
+          </button>
+          <button id="hint-btn" class="btn hint-btn" aria-label="Use hint" title="Use Hint (H)">
+            <span class="btn-icon">💡</span>
+            <span id="hint-count" class="hint-count">3</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text">
+          <span id="sequence-length">0</span> emojis to remember
+        </div>
       </div>
 
-      <div id="sequence-display" class="sequence-display" aria-hidden="true"></div>
+      <div id="sequence-display" class="sequence-display" aria-live="polite" aria-label="Sequence display">
+        <div class="sequence-placeholder">Watch carefully...</div>
+      </div>
 
-      <div id="grid" class="emoji-grid" aria-label="Emoji Grid"></div>
+      <div id="grid" class="emoji-grid" aria-label="Emoji selection grid" role="grid"></div>
 
-      <div class="bottom-row">
-        <button id="quit-btn" class="btn ghost">Quit</button>
-        <div class="info">Tap the emojis in the exact order shown</div>
+      <div class="game-footer">
+        <div class="game-status" id="game-status">Tap the emojis in the exact order shown</div>
+        <button id="quit-btn" class="btn ghost">
+          <span class="btn-icon">🚪</span>
+          <span>Quit</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Pause Screen -->
+    <section id="pause-screen" class="panel center-panel hidden">
+      <h2>Game Paused</h2>
+      <div class="pause-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="current-round">1</div>
+          <div class="stat-label">Current Round</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="hints-left">3</div>
+          <div class="stat-label">Hints Left</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="resume-btn" class="btn primary">
+          <span class="btn-icon">▶️</span>
+          <span>Resume</span>
+        </button>
+        <button id="restart-btn" class="btn ghost">
+          <span class="btn-icon">🔄</span>
+          <span>Restart</span>
+        </button>
+        <button id="quit-to-menu-btn" class="btn ghost">
+          <span class="btn-icon">🏠</span>
+          <span>Main Menu</span>
+        </button>
       </div>
     </section>
 
     <!-- Game Over Screen -->
     <section id="gameover-screen" class="panel center-panel hidden">
-      <h2>Game Over</h2>
-      <p>Your score: <span id="final-score">0</span></p>
-      <p>Best: <span id="final-highscore">0</span></p>
+      <div class="game-over-icon" id="game-over-icon">😵</div>
+      <h2 id="game-over-title">Game Over</h2>
+      <div class="final-stats">
+        <div class="stat-item large">
+          <div class="stat-number" id="final-score">0</div>
+          <div class="stat-label">Your Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="final-highscore">0</div>
+          <div class="stat-label">Best Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="final-round">0</div>
+          <div class="stat-label">Rounds Completed</div>
+        </div>
+      </div>
+      <div class="achievement" id="achievement" style="display: none;">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">New High Score!</div>
+      </div>
       <div class="controls">
-        <button id="replay-btn" class="btn primary">Play Again</button>
-        <button id="home-btn" class="btn ghost">Home</button>
+        <button id="replay-btn" class="btn primary">
+          <span class="btn-icon">🎮</span>
+          <span>Play Again</span>
+        </button>
+        <button id="home-btn" class="btn ghost">
+          <span class="btn-icon">🏠</span>
+          <span>Main Menu</span>
+        </button>
       </div>
     </section>
+
+    <!-- Loading Screen -->
+    <section id="loading-screen" class="panel center-panel hidden">
+      <div class="loading-spinner"></div>
+      <h2>Loading Game...</h2>
+      <div class="loading-tips">
+        <p id="loading-tip">💡 Tip: Focus on the center of the sequence display</p>
+      </div>
+    </section>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+      <button id="sound-toggle" class="btn icon-btn" aria-label="Toggle sound" title="Toggle Sound (M)">
+        <span class="btn-icon" id="sound-icon">🔊</span>
+      </button>
+    </div>
   </main>
 
   <script src="script.js" defer></script>
