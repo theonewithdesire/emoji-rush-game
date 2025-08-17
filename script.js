@@ -1027,10 +1027,9 @@ function setupEventListeners() {
 
   // Handle window resize
   window.addEventListener('resize', debounce(() => {
-    // Rebuild grid if needed for responsive changes
-    if (screenManager.currentScreen === 'game') {
-      gridManager.buildGrid();
-    }
+    // Note: We don't rebuild the grid during gameplay to avoid changing available emojis
+    // The CSS handles responsive layout changes automatically
+    console.log('Window resized - layout handled by CSS');
   }, 250));
 }
 
